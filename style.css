@@ -112,11 +112,12 @@ body {
     margin-bottom: 24px;
     flex-shrink: 0;
     transition: transform 0.3s var(--spring), background 0.3s var(--ease);
+    cursor: pointer;
 }
 
 .sidebar-logo:hover {
     transform: scale(1.12) rotate(-4deg);
-    background: var(--accent);
+ 
 }
 
 .sidebar-logo svg {
