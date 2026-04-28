@@ -1,303 +1,501 @@
-/* ============================================================
-   DARK / LIGHT MODE — MEGA ANIMATION TOGGLE
-   Cole no final do seu script.js
-   ============================================================ */
+/* ═══════════════════════════════════════════
+   ISAAC VIEIRA — PREMIUM PORTFOLIO JS
+   Ultra-advanced animations & interactions
+═══════════════════════════════════════════ */
 
-(function initThemeToggle() {
-    const toggleBtn = document.getElementById('themeToggle');
-    const overlay   = document.getElementById('themeAnimOverlay');
-    const label     = document.getElementById('toggleLabel');
-    const html      = document.documentElement;
+lucide.createIcons();
 
-    if (!toggleBtn || !overlay) return;
+// ── CURSOR ──────────────────────────────────────────────────────────
+const ring = document.getElementById('cursorRing');
+const dot  = document.getElementById('cursorDot');
+const glow = document.getElementById('magGlow');
+let mx = 0, my = 0, rx = 0, ry = 0;
 
-    /* Lê preferência salva ou do sistema */
-    const saved       = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initial     = saved || (prefersDark ? 'dark' : 'light');
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  glow.style.left = mx + 'px'; glow.style.top = my + 'px';
+}, { passive: true });
 
-    html.setAttribute('data-theme', initial);
-    updateLabel(initial);
+(function cursorLoop() {
+  rx += (mx - rx) * 0.14;
+  ry += (my - ry) * 0.14;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(cursorLoop);
+})();
 
-    let animating = false;
+document.querySelectorAll('a, button, .proj-card, .exp-card, .case-card, .contact-card, .spill').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+});
 
-    toggleBtn.addEventListener('click', () => {
-        if (animating) return;
-        animating = true;
 
-        const current = html.getAttribute('data-theme');
-        const next    = current === 'dark' ? 'light' : 'dark';
-        const rect    = toggleBtn.getBoundingClientRect();
-        const cx      = rect.left + rect.width  / 2;
-        const cy      = rect.top  + rect.height / 2;
+// ── BACKGROUND CANVAS — ANIMATED GRADIENT MESH ─────────────────────
+const bgCanvas = document.getElementById('bgCanvas');
+const bgCtx = bgCanvas.getContext('2d');
+let bgW, bgH;
 
-        if (next === 'light') {
-            animateSunrise(cx, cy, () => { applyTheme('light'); animating = false; });
-        } else {
-            animateMoonrise(cx, cy, () => { applyTheme('dark');  animating = false; });
-        }
+function resizeBg() {
+  bgW = bgCanvas.width  = window.innerWidth;
+  bgH = bgCanvas.height = window.innerHeight;
+}
+resizeBg();
+window.addEventListener('resize', resizeBg);
+
+const blobs = [
+  { x: 0.15, y: 0.2,  r: 0.35, color: 'rgba(0,122,255,0.06)', vx: 0.0003, vy: 0.0002 },
+  { x: 0.8,  y: 0.15, r: 0.30, color: 'rgba(90,200,250,0.05)', vx: -0.0002, vy: 0.0003 },
+  { x: 0.5,  y: 0.7,  r: 0.40, color: 'rgba(191,90,242,0.04)', vx: 0.0002, vy: -0.0002 },
+  { x: 0.9,  y: 0.8,  r: 0.25, color: 'rgba(52,199,89,0.04)',  vx: -0.0003, vy: -0.0002 },
+];
+
+function drawBg(t) {
+  bgCtx.clearRect(0, 0, bgW, bgH);
+  blobs.forEach(b => {
+    b.x += b.vx * Math.sin(t * 0.5);
+    b.y += b.vy * Math.cos(t * 0.4);
+    if (b.x < 0 || b.x > 1) b.vx *= -1;
+    if (b.y < 0 || b.y > 1) b.vy *= -1;
+
+    const grd = bgCtx.createRadialGradient(
+      b.x * bgW, b.y * bgH, 0,
+      b.x * bgW, b.y * bgH, b.r * Math.max(bgW, bgH)
+    );
+    grd.addColorStop(0, b.color);
+    grd.addColorStop(1, 'transparent');
+    bgCtx.fillStyle = grd;
+    bgCtx.fillRect(0, 0, bgW, bgH);
+  });
+  requestAnimationFrame(t2 => drawBg(t2 * 0.001));
+}
+requestAnimationFrame(t => drawBg(t * 0.001));
+
+
+// ── HERO PARTICLES ───────────────────────────────────────────────────
+const hpc = document.getElementById('heroParticles');
+const hpx = hpc.getContext('2d');
+let hpW, hpH;
+
+function resizeHp() {
+  hpW = hpc.width  = hpc.offsetWidth;
+  hpH = hpc.height = hpc.offsetHeight;
+}
+resizeHp();
+window.addEventListener('resize', resizeHp);
+
+const particles = Array.from({ length: 60 }, () => ({
+  x: Math.random(),
+  y: Math.random(),
+  size: Math.random() * 2 + 0.5,
+  vx: (Math.random() - 0.5) * 0.0003,
+  vy: (Math.random() - 0.5) * 0.0003,
+  alpha: Math.random() * 0.4 + 0.1,
+  pulse: Math.random() * Math.PI * 2
+}));
+
+let mouseHpX = 0.5, mouseHpY = 0.5;
+hpc.addEventListener('mousemove', e => {
+  const r = hpc.getBoundingClientRect();
+  mouseHpX = (e.clientX - r.left) / hpW;
+  mouseHpY = (e.clientY - r.top)  / hpH;
+});
+
+function drawParticles(t) {
+  hpx.clearRect(0, 0, hpW, hpH);
+  particles.forEach((p, i) => {
+    p.pulse += 0.01;
+    const a = p.alpha * (0.7 + 0.3 * Math.sin(p.pulse));
+
+    // Mouse repulsion
+    const dx = p.x - mouseHpX, dy = p.y - mouseHpY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 0.12) {
+      p.x += dx * 0.001 / (dist + 0.001);
+      p.y += dy * 0.001 / (dist + 0.001);
+    }
+
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = 1; if (p.x > 1) p.x = 0;
+    if (p.y < 0) p.y = 1; if (p.y > 1) p.y = 0;
+
+    // Draw connections
+    particles.forEach((p2, j) => {
+      if (j <= i) return;
+      const dx2 = p.x - p2.x, dy2 = p.y - p2.y;
+      const d2 = Math.sqrt(dx2*dx2 + dy2*dy2);
+      if (d2 < 0.12) {
+        hpx.beginPath();
+        hpx.strokeStyle = `rgba(0,122,255,${0.06 * (1 - d2/0.12)})`;
+        hpx.lineWidth = 0.5;
+        hpx.moveTo(p.x * hpW, p.y * hpH);
+        hpx.lineTo(p2.x * hpW, p2.y * hpH);
+        hpx.stroke();
+      }
     });
 
-    function applyTheme(theme) {
-        html.classList.add('theme-transitioning');
-        html.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        updateLabel(theme);
-        setTimeout(() => html.classList.remove('theme-transitioning'), 500);
+    hpx.beginPath();
+    hpx.arc(p.x * hpW, p.y * hpH, p.size, 0, Math.PI * 2);
+    hpx.fillStyle = `rgba(0,122,255,${a})`;
+    hpx.fill();
+  });
+  requestAnimationFrame(drawParticles);
+}
+requestAnimationFrame(drawParticles);
+
+
+// ── FOOTER PARTICLES ─────────────────────────────────────────────────
+const fpc = document.getElementById('footerParticles');
+if (fpc) {
+  const fpx = fpc.getContext('2d');
+  let fpW, fpH;
+  function resizeFp() {
+    fpW = fpc.width  = fpc.offsetWidth;
+    fpH = fpc.height = fpc.offsetHeight;
+  }
+  resizeFp();
+  window.addEventListener('resize', resizeFp);
+
+  const fp = Array.from({ length: 40 }, () => ({
+    x: Math.random() * fpW,
+    y: Math.random() * fpH,
+    size: Math.random() * 1.5 + 0.5,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: -Math.random() * 0.5 - 0.2,
+    alpha: Math.random() * 0.3 + 0.05
+  }));
+
+  function drawFooterParticles() {
+    fpx.clearRect(0, 0, fpW, fpH);
+    fp.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      p.alpha -= 0.0005;
+      if (p.y < -5 || p.alpha <= 0) {
+        p.x = Math.random() * fpW;
+        p.y = fpH + 5;
+        p.alpha = Math.random() * 0.3 + 0.05;
+        p.vy = -Math.random() * 0.5 - 0.2;
+      }
+      fpx.beginPath();
+      fpx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      fpx.fillStyle = `rgba(0,122,255,${p.alpha})`;
+      fpx.fill();
+    });
+    requestAnimationFrame(drawFooterParticles);
+  }
+  requestAnimationFrame(drawFooterParticles);
+}
+
+
+// ── SLIDESHOW ────────────────────────────────────────────────────────
+const slides = document.querySelectorAll('.slideshow img');
+const dotsWrap = document.getElementById('slideDots');
+let cur = 0;
+
+slides.forEach((_, i) => {
+  const d = document.createElement('button');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.setAttribute('aria-label', 'Photo ' + (i + 1));
+  d.addEventListener('click', () => goTo(i));
+  dotsWrap.appendChild(d);
+});
+
+const dots = document.querySelectorAll('.dot');
+
+function goTo(n) {
+  slides[cur].classList.remove('active');
+  dots[cur].classList.remove('active');
+  cur = n;
+  slides[cur].classList.add('active');
+  dots[cur].classList.add('active');
+}
+
+setInterval(() => goTo((cur + 1) % slides.length), 4200);
+
+
+// ── SCROLL REVEAL ────────────────────────────────────────────────────
+const revEls = document.querySelectorAll('.reveal, .reveal-hero');
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }
+  });
+}, { threshold: 0.07 });
+revEls.forEach(el => revObs.observe(el));
+
+
+// ── HEADER SCROLL ────────────────────────────────────────────────────
+const header = document.getElementById('site-header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+
+// ── MOBILE MENU ───────────────────────────────────────────────────────
+const menuToggle = document.getElementById('menuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+if (menuToggle) menuToggle.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+function closeMobileMenu() { mobileMenu.classList.remove('open'); }
+window.closeMobileMenu = closeMobileMenu;
+
+
+// ── COUNTER ANIMATION ─────────────────────────────────────────────────
+function animateCount(el) {
+  const target = parseFloat(el.dataset.target);
+  if (isNaN(target)) return;
+  const duration = 1600;
+  let start = null;
+  function step(ts) {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 4);
+    el.textContent = Math.round(target * eased);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const cntObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.stat-num[data-target], .istat-num.counter[data-target]').forEach(animateCount);
+      cntObs.unobserve(e.target);
     }
+  });
+}, { threshold: 0.3 });
 
-    function updateLabel(theme) {
-        if (label) label.textContent = theme === 'dark' ? 'Light' : 'Dark';
+document.querySelectorAll('.hero-stats, .impact-row').forEach(el => cntObs.observe(el));
+
+
+// ── 3D CARD TILT ──────────────────────────────────────────────────────
+document.querySelectorAll('[data-tilt]').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top)  / r.height - 0.5;
+    const tx = x * 8, ty = -y * 8;
+    card.style.transform = `perspective(1000px) rotateY(${tx}deg) rotateX(${ty}deg) translateZ(8px)`;
+
+    // Glow follows mouse
+    const glow = card.querySelector('.exp-card-glow, .case-glow, .proj-bg-glow');
+    if (glow) {
+      glow.style.left = (e.clientX - r.left - 150) + 'px';
+      glow.style.top  = (e.clientY - r.top  - 150) + 'px';
     }
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    const glow = card.querySelector('.exp-card-glow, .case-glow');
+    if (glow) { glow.style.left = ''; glow.style.top = ''; }
+  });
+});
 
-    /* ── Easings ── */
-    function easeInOutCubic(t) {
-        return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
+
+// ── MAGNETIC BUTTONS ──────────────────────────────────────────────────
+document.querySelectorAll('.mag-btn').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const cx = r.left + r.width  / 2;
+    const cy = r.top  + r.height / 2;
+    const dx = (e.clientX - cx) * 0.35;
+    const dy = (e.clientY - cy) * 0.35;
+    btn.style.transform = `translate(${dx}px, ${dy}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = '';
+    btn.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+    setTimeout(() => { btn.style.transition = ''; }, 500);
+  });
+});
+
+
+// ── SIDEBAR NAV DOTS ──────────────────────────────────────────────────
+const sections = document.querySelectorAll('section[id], footer[id]');
+const sdots    = document.querySelectorAll('.sdot');
+
+const secObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      sdots.forEach(d => d.classList.remove('active'));
+      const active = document.querySelector(`.sdot[data-section="${e.target.id}"]`);
+      if (active) active.classList.add('active');
     }
-    function easeOutCubic(t) { return 1 - Math.pow(1-t, 3); }
-    function easeOutBack(t) {
-        const c = 1.70158 + 1;
-        return 1 + c * Math.pow(t-1, 3) + (c-1) * Math.pow(t-1, 2);
+  });
+}, { threshold: 0.4 });
+
+sections.forEach(s => secObs.observe(s));
+
+sdots.forEach(d => {
+  d.addEventListener('click', () => {
+    const target = document.getElementById(d.dataset.section);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+
+// ── CICD HOVER ANIMATION ──────────────────────────────────────────────
+document.querySelectorAll('.cicd-flow').forEach(flow => {
+  const steps = flow.querySelectorAll('.cicd-step');
+  const parent = flow.closest('.case-card');
+  if (!parent) return;
+  parent.addEventListener('mouseenter', () => {
+    steps.forEach((s, i) => {
+      setTimeout(() => {
+        s.querySelector('.cicd-icon').style.transform = 'scale(1.1) translateY(-3px)';
+        s.querySelector('.cicd-icon').style.background = 'rgba(0,122,255,0.12)';
+        s.querySelector('.cicd-icon').style.borderColor = 'rgba(0,122,255,0.3)';
+        s.querySelector('.cicd-icon svg').style.color = '#007AFF';
+      }, i * 80);
+    });
+  });
+  parent.addEventListener('mouseleave', () => {
+    steps.forEach(s => {
+      const ico = s.querySelector('.cicd-icon');
+      ico.style.transform = '';
+      if (!s.classList.contains('accent') && !s.classList.contains('success')) {
+        ico.style.background = '';
+        ico.style.borderColor = '';
+        ico.querySelector('svg').style.color = '';
+      }
+    });
+  });
+});
+
+
+// ── SECTION TRANSITIONS ───────────────────────────────────────────────
+// Text scramble effect for section titles
+class TextScramble {
+  constructor(el) {
+    this.el = el;
+    this.chars = '!<>-_\\/[]{}—=+*^?#________';
+    this.update = this.update.bind(this);
+  }
+  setText(newText) {
+    const old = this.el.innerText;
+    const len = Math.max(old.length, newText.length);
+    const promise = new Promise(resolve => this.resolve = resolve);
+    this.queue = [];
+    for (let i = 0; i < len; i++) {
+      const from = old[i] || '';
+      const to   = newText[i] || '';
+      const start = Math.floor(Math.random() * 10);
+      const end   = start + Math.floor(Math.random() * 12);
+      this.queue.push({ from, to, start, end });
     }
-    function lerp(a, b, t) { return a + (b-a)*t; }
-    function rand(a, b)     { return lerp(a, b, Math.random()); }
-
-    /* ── Helper: cria elemento com estilos inline ── */
-    function mkEl(tag, styles) {
-        const el = document.createElement(tag);
-        Object.assign(el.style, styles);
-        return el;
-    }
-
-    /* ─────────────────────────────────────────────────────
-       ☀️  SUNRISE — animação para LIGHT MODE
-    ───────────────────────────────────────────────────── */
-    function animateSunrise(cx, cy, onDone) {
-        overlay.innerHTML = '';
-        const radius = Math.hypot(
-            Math.max(cx, window.innerWidth  - cx),
-            Math.max(cy, window.innerHeight - cy)
-        ) * 1.1;
-
-        /* Ripple principal */
-        const ripple = mkEl('div', {
-            position: 'absolute', left: cx+'px', top: cy+'px',
-            width: '0px', height: '0px', borderRadius: '50%',
-            background: '#f5f0e0',
-            transform: 'translate(-50%,-50%)',
-            pointerEvents: 'none', willChange: 'width,height,opacity',
-        });
-        overlay.appendChild(ripple);
-
-        /* Halo laranja */
-        const halo = mkEl('div', {
-            position: 'absolute', left: cx+'px', top: cy+'px',
-            width: '0px', height: '0px', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,200,80,.55) 0%, rgba(255,160,40,.2) 50%, transparent 80%)',
-            transform: 'translate(-50%,-50%)',
-            pointerEvents: 'none', willChange: 'width,height,opacity',
-        });
-        overlay.appendChild(halo);
-
-        /* Raios */
-        const rays = [];
-        for (let i = 0; i < 20; i++) {
-            const angle  = (i/20)*360;
-            const length = rand(40, 90);
-            const dist   = rand(14, 28);
-            const w      = rand(1.5, 3);
-            const el = mkEl('div', {
-                position: 'absolute', left: cx+'px', top: cy+'px',
-                width: w+'px', height: length+'px', borderRadius: '2px',
-                background: `rgba(255,${(rand(180,220))|0},60,.9)`,
-                transformOrigin: `${w/2}px ${-dist}px`,
-                transform: `rotate(${angle}deg) scaleY(0)`,
-                opacity: '0', pointerEvents: 'none', willChange: 'transform,opacity',
-            });
-            overlay.appendChild(el);
-            rays.push({ el, angle, delay: rand(0, 0.25) });
+    cancelAnimationFrame(this.frameRequest);
+    this.frame = 0;
+    this.update();
+    return promise;
+  }
+  update() {
+    let output = ''; let complete = 0;
+    for (let i = 0, n = this.queue.length; i < n; i++) {
+      let { from, to, start, end, char } = this.queue[i];
+      if (this.frame >= end) { complete++; output += to; }
+      else if (this.frame >= start) {
+        if (!char || Math.random() < 0.28) {
+          char = this.chars[Math.floor(Math.random() * this.chars.length)];
+          this.queue[i].char = char;
         }
-
-        /* Partículas */
-        const particles = [];
-        for (let i = 0; i < 35; i++) {
-            const a    = rand(0, 360);
-            const d    = rand(60, 200);
-            const size = rand(3, 8);
-            const el = mkEl('div', {
-                position: 'absolute',
-                left: (cx + Math.cos(a*Math.PI/180)*d)+'px',
-                top:  (cy + Math.sin(a*Math.PI/180)*d)+'px',
-                width: size+'px', height: size+'px', borderRadius: '50%',
-                background: `rgba(255,${(rand(200,240))|0},${(rand(80,140))|0},.9)`,
-                transform: 'translate(-50%,-50%) scale(0)',
-                opacity: '0', pointerEvents: 'none', willChange: 'transform,opacity',
-            });
-            overlay.appendChild(el);
-            particles.push({ el, delay: rand(0.05, 0.45) });
-        }
-
-        const DUR = 750;
-        let start = null;
-        function frame(ts) {
-            if (!start) start = ts;
-            const raw = Math.min((ts-start)/DUR, 1);
-            const p   = easeInOutCubic(raw);
-
-            const d = p * radius * 2;
-            ripple.style.width   = d+'px';
-            ripple.style.height  = d+'px';
-            ripple.style.opacity = String(Math.min(raw*3, 1));
-
-            const dh = p * radius * 2.4;
-            halo.style.width   = dh+'px';
-            halo.style.height  = dh+'px';
-            halo.style.opacity = String(Math.sin(raw*Math.PI)*0.8);
-
-            rays.forEach(({ el, angle, delay }) => {
-                const rp = Math.max((raw-delay)/(1-delay), 0);
-                const re = easeOutBack(Math.min(rp, 1));
-                el.style.opacity   = String(Math.sin(Math.min(rp,1)*Math.PI)*0.9);
-                el.style.transform = `rotate(${angle}deg) scaleY(${re})`;
-            });
-
-            particles.forEach(({ el, delay }) => {
-                const pp = Math.max((raw-delay)/(1-delay), 0);
-                const pe = easeOutCubic(Math.min(pp, 1));
-                el.style.opacity   = String(Math.sin(Math.min(pp,1)*Math.PI)*0.85);
-                el.style.transform = `translate(-50%,-50%) scale(${pe})`;
-            });
-
-            if (raw < 1) { requestAnimationFrame(frame); }
-            else { setTimeout(() => { overlay.innerHTML=''; onDone(); }, 80); }
-        }
-        requestAnimationFrame(frame);
+        output += `<span style="opacity:0.4;color:#007AFF">${char}</span>`;
+      } else { output += from; }
     }
+    this.el.innerHTML = output;
+    if (complete === this.queue.length) { this.resolve(); return; }
+    this.frameRequest = requestAnimationFrame(this.update);
+    this.frame++;
+  }
+}
 
-    /* ─────────────────────────────────────────────────────
-       🌙  MOONRISE — animação para DARK MODE
-    ───────────────────────────────────────────────────── */
-    function animateMoonrise(cx, cy, onDone) {
-        overlay.innerHTML = '';
-        const radius = Math.hypot(
-            Math.max(cx, window.innerWidth  - cx),
-            Math.max(cy, window.innerHeight - cy)
-        ) * 1.1;
-
-        /* Ripple escuro */
-        const ripple = mkEl('div', {
-            position: 'absolute', left: cx+'px', top: cy+'px',
-            width: '0px', height: '0px', borderRadius: '50%',
-            background: '#0d0d0f',
-            transform: 'translate(-50%,-50%)',
-            pointerEvents: 'none', willChange: 'width,height,opacity',
-        });
-        overlay.appendChild(ripple);
-
-        /* Halo roxo */
-        const halo = mkEl('div', {
-            position: 'absolute', left: cx+'px', top: cy+'px',
-            width: '0px', height: '0px', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(100,80,220,.45) 0%, rgba(60,40,140,.2) 50%, transparent 80%)',
-            transform: 'translate(-50%,-50%)',
-            pointerEvents: 'none', willChange: 'width,height,opacity',
-        });
-        overlay.appendChild(halo);
-
-        /* Lua crescente */
-        const moonSize = 48;
-        const moon = mkEl('div', {
-            position: 'absolute',
-            left: (cx - moonSize/2)+'px',
-            top:  (cy - moonSize/2)+'px',
-            width: moonSize+'px', height: moonSize+'px',
-            opacity: '0', transform: 'scale(0) rotate(-30deg)',
-            pointerEvents: 'none', willChange: 'transform,opacity',
-        });
-        moon.innerHTML = `<svg viewBox="0 0 24 24" width="${moonSize}" height="${moonSize}" fill="rgba(200,190,255,.95)"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
-        overlay.appendChild(moon);
-
-        /* Estrelas */
-        const stars = [];
-        for (let i = 0; i < 45; i++) {
-            const a    = rand(0, 360);
-            const d    = rand(50, Math.min(window.innerWidth, window.innerHeight)*0.45);
-            const size = rand(1.5, 5);
-            const color = Math.random() > 0.6 ? '#b0a8ff' : '#fffde8';
-            const el = mkEl('div', {
-                position: 'absolute',
-                left: (cx + Math.cos(a*Math.PI/180)*d)+'px',
-                top:  (cy + Math.sin(a*Math.PI/180)*d)+'px',
-                width: size+'px', height: size+'px', borderRadius: '50%',
-                background: color,
-                boxShadow: `0 0 ${size*2}px ${color}`,
-                transform: 'translate(-50%,-50%) scale(0)',
-                opacity: '0', pointerEvents: 'none', willChange: 'transform,opacity',
-            });
-            overlay.appendChild(el);
-            stars.push({ el, delay: rand(0.1, 0.6), twinkle: rand(0, Math.PI*2) });
-        }
-
-        /* Poeira espacial */
-        const dust = [];
-        for (let i = 0; i < 20; i++) {
-            const a    = rand(0, 360);
-            const d    = rand(30, 120);
-            const size = rand(2, 5);
-            const el = mkEl('div', {
-                position: 'absolute',
-                left: (cx + Math.cos(a*Math.PI/180)*d)+'px',
-                top:  (cy + Math.sin(a*Math.PI/180)*d)+'px',
-                width: size+'px', height: size+'px', borderRadius: '50%',
-                background: `rgba(${(rand(140,180))|0},${(rand(120,160))|0},255,.7)`,
-                transform: 'translate(-50%,-50%) scale(0)',
-                opacity: '0', pointerEvents: 'none', willChange: 'transform,opacity',
-            });
-            overlay.appendChild(el);
-            dust.push({ el, delay: rand(0, 0.3) });
-        }
-
-        const DUR = 800;
-        let start = null;
-        function frame(ts) {
-            if (!start) start = ts;
-            const raw = Math.min((ts-start)/DUR, 1);
-            const p   = easeInOutCubic(raw);
-
-            const d = p * radius * 2;
-            ripple.style.width   = d+'px';
-            ripple.style.height  = d+'px';
-            ripple.style.opacity = String(Math.min(raw*2.5, 1));
-
-            const dh = p * radius * 2.5;
-            halo.style.width   = dh+'px';
-            halo.style.height  = dh+'px';
-            halo.style.opacity = String(Math.sin(raw*Math.PI)*0.75);
-
-            const mp = Math.max((raw-0.05)/0.6, 0);
-            const me = easeOutBack(Math.min(mp, 1));
-            moon.style.opacity   = String(Math.min(mp*2, 1));
-            moon.style.transform = `scale(${me}) rotate(${(1-me)*-30}deg)`;
-
-            stars.forEach(({ el, delay, twinkle }) => {
-                const sp = Math.max((raw-delay)/(1-delay), 0);
-                const se = easeOutCubic(Math.min(sp, 1));
-                const tw = Math.sin(raw*12 + twinkle)*0.2 + 0.8;
-                el.style.opacity   = String(Math.sin(Math.min(sp,1)*Math.PI)*0.9*tw);
-                el.style.transform = `translate(-50%,-50%) scale(${se})`;
-            });
-
-            dust.forEach(({ el, delay }) => {
-                const dp = Math.max((raw-delay)/(1-delay), 0);
-                const de = easeOutCubic(Math.min(dp, 1));
-                el.style.opacity   = String(Math.sin(Math.min(dp,1)*Math.PI)*0.7);
-                el.style.transform = `translate(-50%,-50%) scale(${de})`;
-            });
-
-            if (raw < 1) { requestAnimationFrame(frame); }
-            else { setTimeout(() => { overlay.innerHTML=''; onDone(); }, 80); }
-        }
-        requestAnimationFrame(frame);
+// Apply scramble to eyebrow texts on section entry
+const scrambleObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const labels = e.target.querySelectorAll('.section-label');
+      labels.forEach(label => {
+        const ts = new TextScramble(label);
+        ts.setText(label.textContent.trim());
+      });
     }
+  });
+}, { threshold: 0.3 });
 
-})();
+document.querySelectorAll('section').forEach(s => scrambleObs.observe(s));
+
+
+// ── PARALLAX HERO ─────────────────────────────────────────────────────
+const heroSection = document.querySelector('.hero');
+window.addEventListener('scroll', () => {
+  const st = window.scrollY;
+  if (!heroSection) return;
+  const heroH = heroSection.offsetHeight;
+  if (st > heroH) return;
+  const p = st / heroH;
+  const photoWrap = document.querySelector('.hero-photo-wrap');
+  const heroText  = document.querySelector('.hero-text');
+  if (photoWrap) photoWrap.style.transform = `translateY(${p * 40}px)`;
+  if (heroText)  heroText.style.transform  = `translateY(${p * 20}px)`;
+  heroSection.style.opacity = 1 - p * 0.5;
+}, { passive: true });
+
+
+// ── STACK PILLS STAGGER ───────────────────────────────────────────────
+document.querySelectorAll('.spill').forEach((pill, i) => {
+  pill.style.transitionDelay = (i * 0.04) + 's';
+});
+
+
+// ── SKILLS LIST STAGGER ───────────────────────────────────────────────
+document.querySelectorAll('.skills-list li, .exp-highlights .hl-item').forEach((el, i) => {
+  el.style.animationDelay = (i * 0.06) + 's';
+});
+
+
+// ── ORB MOUSE TRACKING ────────────────────────────────────────────────
+document.addEventListener('mousemove', e => {
+  const orbs = document.querySelectorAll('.orb');
+  const cx = e.clientX / window.innerWidth  - 0.5;
+  const cy = e.clientY / window.innerHeight - 0.5;
+  orbs.forEach((orb, i) => {
+    const factor = (i + 1) * 8;
+    orb.style.transform = `translateX(${cx * factor}px) translateY(${cy * factor}px)`;
+  });
+}, { passive: true });
+
+
+// ── SMOOTH ANCHOR SCROLL ──────────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+
+// ── PROJ CARD 3D TILT (extra) ─────────────────────────────────────────
+document.querySelectorAll('.proj-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - 0.5;
+    const y = (e.clientY - r.top)  / r.height - 0.5;
+    card.style.transform = `perspective(900px) rotateY(${x * 7}deg) rotateX(${-y * 7}deg) translateY(-6px) scale(1.01)`;
+  });
+  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+});
+
+
+// ── PHOTO WRAP 3D MOUSE ───────────────────────────────────────────────
+const photoWrap = document.querySelector('.hero-photo-wrap');
+if (photoWrap) {
+  document.addEventListener('mousemove', e => {
+    const r = photoWrap.getBoundingClientRect();
+    const px = r.left + r.width / 2, py = r.top + r.height / 2;
+    const dx = (e.clientX - px) / window.innerWidth;
+    const dy = (e.clientY - py) / window.innerHeight;
+    const curr = parseFloat(photoWrap.style.getPropertyValue('--parallax-y') || 0);
+    photoWrap.querySelector('.photo-glass-card').style.transform =
+      `perspective(1000px) rotateY(${dx * 10}deg) rotateX(${-dy * 10}deg)`;
+  }, { passive: true });
+}
