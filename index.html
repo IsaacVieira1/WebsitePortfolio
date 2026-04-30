@@ -1,823 +1,853 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Isaac Vieira — Fullstack Developer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="icon" type="image/x-icon" href="Images/icons8-usuário-96.png"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<link rel="stylesheet" href="style.css"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Isaac Vieira — Portfolio</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
+
 <body>
 
-<!-- WEBGL CANVAS BACKGROUND -->
-<canvas id="bgCanvas"></canvas>
+    <!-- CURSOR GLOW -->
+    <div class="cursor-glow" id="cursorGlow"></div>
 
-<!-- NOISE OVERLAY -->
-<div class="noise-overlay"></div>
-
-<!-- CURSOR -->
-<div class="cursor-ring" id="cursorRing"></div>
-<div class="cursor-dot" id="cursorDot"></div>
-
-<!-- MAGNETIC GLOW -->
-<div class="mag-glow" id="magGlow"></div>
-
-<!-- ═══════════════════════════════
-     SIDEBAR
-═══════════════════════════════ -->
-<nav class="sidebar" id="sidebar">
-  <div class="sidebar-logo" id="sidebarLogo">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="16 18 22 12 16 6"></polyline>
-      <polyline points="8 6 2 12 8 18"></polyline>
-    </svg>
-  </div>
-  <div class="sidebar-dots">
-    <button class="sdot active" data-section="inicio" data-tip="Home"></button>
-    <button class="sdot" data-section="sobre" data-tip="About"></button>
-    <button class="sdot" data-section="experience" data-tip="Experience"></button>
-    <button class="sdot" data-section="projetos" data-tip="Projects"></button>
-    <button class="sdot" data-section="case-studies" data-tip="Cases"></button>
-    <button class="sdot" data-section="curriculo" data-tip="Resume"></button>
-    <button class="sdot" data-section="contato" data-tip="Contact"></button>
-  </div>
-  <span class="sidebar-name">Isaac Vieira</span>
-</nav>
-
-<!-- ═══════════════════════════════
-     HEADER
-═══════════════════════════════ -->
-<header class="site-header" id="site-header">
-  <nav class="header-nav">
-    <ul>
-      <li><a href="#inicio">Home</a></li>
-      <li><a href="#sobre">About</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#projetos">Projects</a></li>
-      <li><a href="#case-studies">Cases</a></li>
-      <li><a href="#curriculo">Resume</a></li>
-      <li><a href="#contato">Contact</a></li>
-    </ul>
-  </nav>
-  <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
-    <i data-lucide="menu"></i>
-  </button>
-</header>
-
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <ul>
-    <li><a href="#inicio" onclick="closeMobileMenu()">Home</a></li>
-    <li><a href="#sobre" onclick="closeMobileMenu()">About</a></li>
-    <li><a href="#experience" onclick="closeMobileMenu()">Experience</a></li>
-    <li><a href="#projetos" onclick="closeMobileMenu()">Projects</a></li>
-    <li><a href="#case-studies" onclick="closeMobileMenu()">Cases</a></li>
-    <li><a href="#curriculo" onclick="closeMobileMenu()">Resume</a></li>
-    <li><a href="#contato" onclick="closeMobileMenu()">Contact</a></li>
-  </ul>
-</div>
-
-<!-- ═══════════════════════════════
-     MAIN CONTENT
-═══════════════════════════════ -->
-<main class="content">
-
-<!-- ══════════════════════════════
-     HERO
-══════════════════════════════ -->
-<section class="hero" id="inicio">
-
-  <!-- Floating 3D orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-  <div class="orb orb-4"></div>
-
-  <!-- Particle field -->
-  <canvas class="particle-canvas" id="heroParticles"></canvas>
-
-  <!-- Grid lines -->
-  <div class="hero-grid"></div>
-
-  <div class="hero-inner">
-    <!-- Photo -->
-    <div class="hero-photo-wrap reveal-hero" style="--delay:0.2s">
-      <div class="photo-ring photo-ring-1"></div>
-      <div class="photo-ring photo-ring-2"></div>
-      <div class="photo-ring photo-ring-3"></div>
-      <div class="photo-glass-card">
-        <div class="slideshow" id="slideshow">
-          <img src="Images/meandy.png" alt="Isaac" class="active"/>
-          <img src="Images/meandy2.png" alt="Isaac"/>
-          <img src="Images/meandy3.png" alt="Isaac"/>
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
         </div>
-        <div class="photo-status">
-          <span class="status-dot"></span>
-          <span>Available for work</span>
-        </div>
-      </div>
-      <div class="floating-badge badge-node">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node"/>
-        Node.js
-      </div>
-      <div class="floating-badge badge-react">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React"/>
-        React
-      </div>
-      <div class="floating-badge badge-ts">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TS"/>
-        TypeScript
-      </div>
-      <div class="slide-dots" id="slideDots"></div>
-    </div>
+        <span class="sidebar-name">Isaac Vieira</span>
+    </nav>
 
-    <!-- Text -->
-    <div class="hero-text">
-      <p class="hero-eyebrow reveal" style="--delay:0.1s">
-        <span class="eyebrow-line"></span>
-        Fullstack Developer
-        <span class="eyebrow-tag">Open to work</span>
-      </p>
+    <!-- MAIN -->
+    <main class="content">
 
-      <h1 class="hero-h1">
-        <span class="h1-line reveal" style="--delay:0.15s">Hi, I'm</span>
-        <span class="h1-name reveal" style="--delay:0.25s">
-          <span class="name-reveal">Isaac</span>
-        </span>
-      </h1>
+        <!-- HEADER -->
+        <header class="site-header" id="site-header">
+            <nav class="header-nav">
+                
+                <ul>
+                    <li><a href="#inicio">Home</a></li>
+                    <li><a href="#sobre">About</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#projetos">Projects</a></li>
+                    <li><a href="#case-studies">Case Studies</a></li>
+                    <li><a href="#curriculo">Resume</a></li>
+                    <li><a href="#contato">Contact</a></li>
+                </ul>
 
-      <p class="hero-sub reveal" style="--delay:0.35s">
-        Building clean, purposeful digital experiences — from backend systems to polished UIs that users actually love.
-      </p>
+                
+            </nav>
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
 
-      <!-- Stats -->
-      <div class="hero-stats reveal" style="--delay:0.4s">
-        <div class="stat-item">
-          <span class="stat-num" data-target="20">0</span><span class="stat-plus">+</span>
-          <span class="stat-label">Projects Live</span>
-        </div>
-        <div class="stat-sep"></div>
-        <div class="stat-item">
-          <span class="stat-num" data-target="4">0</span><span class="stat-plus">+</span>
-          <span class="stat-label">Yrs Experience</span>
-        </div>
-        <div class="stat-sep"></div>
-        <div class="stat-item">
-          <span class="stat-num" data-target="10">0</span><span class="stat-plus">+</span>
-          <span class="stat-label">Tech Stack</span>
-        </div>
-      </div>
-
-      <!-- CTAs -->
-      <div class="hero-ctas reveal" style="--delay:0.5s">
-        <a class="cta-primary mag-btn" href="https://drive.google.com/file/d/1yv1pk2SYhSbrFObPv12J53C_jQBMKxiK/view?usp=drive_link" target="_blank">
-          <span class="btn-bg"></span>
-          <i data-lucide="file-text"></i>
-          <span>View Resume</span>
-          <span class="btn-arrow">→</span>
-        </a>
-        <a class="cta-ghost mag-btn" href="#contato">
-          <i data-lucide="send"></i>
-          <span>Get in Touch</span>
-        </a>
-      </div>
-
-      <!-- Tech row -->
-      <div class="hero-tech-row reveal" style="--delay:0.6s">
-        <span class="tech-label">Built with</span>
-        <div class="tech-icons-row">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" alt="Next.js" title="Next.js"/>
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" title="PostgreSQL"/>
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" title="Docker"/>
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" alt="Azure" title="Azure"/>
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" title="C#"/>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scroll indicator -->
-  <div class="scroll-hint reveal" style="--delay:0.9s">
-    <div class="scroll-mouse">
-      <div class="scroll-wheel"></div>
-    </div>
-    <span>Scroll</span>
-  </div>
-</section>
-
-<!-- ══════════════════════════════
-     ABOUT
-══════════════════════════════ -->
-<section id="sobre" class="about-section">
-  <div class="about-bg-mesh"></div>
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-left">
-        <p class="section-label reveal">About me</p>
-        <h2 class="section-title reveal" style="--delay:0.1s">
-          Crafting<br/>
-          <span class="gradient-text">digital art</span><br/>
-          with code
-        </h2>
-        <div class="about-meta-cards reveal" style="--delay:0.2s">
-          <div class="meta-card glass-card">
-            <i data-lucide="map-pin"></i>
-            <span>Brazil & Remote</span>
-          </div>
-          <div class="meta-card glass-card">
-            <i data-lucide="graduation-cap"></i>
-            <span>Software Engineering</span>
-          </div>
-          <div class="meta-card glass-card">
-            <i data-lucide="zap"></i>
-            <span>Fullstack Dev</span>
-          </div>
-        </div>
-      </div>
-      <div class="about-right">
-        <div class="about-text-block reveal" style="--delay:0.15s">
-          <p>For me, programming goes beyond written code — it's about giving life to ideas that are still taking shape. As a fullstack developer, I build solutions that truly make sense: functional, accessible, and purposeful.</p>
-          <p>I have experience with different languages and frameworks, but what really drives me is writing clean, creative code that delivers a great experience for the end user.</p>
-          <p>I believe in the power of technology to transform everyday life, which is why I'm always learning, testing, and evolving. I love combining logic with creativity to deliver real value to people.</p>
-        </div>
-        <div class="about-values reveal" style="--delay:0.25s">
-          <div class="value-chip"><i data-lucide="cpu"></i>Clean Architecture</div>
-          <div class="value-chip"><i data-lucide="layers"></i>Fullstack</div>
-          <div class="value-chip"><i data-lucide="shield-check"></i>Security</div>
-          <div class="value-chip"><i data-lucide="trending-up"></i>Performance</div>
-          <div class="value-chip"><i data-lucide="users"></i>UX-driven</div>
-          <div class="value-chip"><i data-lucide="infinity"></i>CI/CD</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════
-     EXPERIENCE
-══════════════════════════════ -->
-<section id="experience" class="experience-section">
-  <div class="exp-bg-lines"></div>
-  <div class="container">
-    <p class="section-label reveal">Where I've worked</p>
-    <h2 class="section-title reveal" style="--delay:0.1s">Experience</h2>
-
-    <div class="exp-timeline">
-
-      <!-- OI DIGITAL MEDIA -->
-      <div class="exp-card glass-card reveal" style="--delay:0.1s" data-tilt>
-        <div class="exp-card-glow"></div>
-        <div class="exp-header">
-          <div class="exp-logo-wrap">
-            <div class="exp-logo">
-              <i data-lucide="building-2"></i>
-            </div>
-            <div>
-              <h3 class="exp-company">OI Digital Media</h3>
-              <p class="exp-location"><i data-lucide="globe"></i>Remote · United States</p>
-            </div>
-          </div>
-          <div class="exp-right">
-            <span class="exp-current-badge"><span class="badge-pulse"></span>Current</span>
-            <span class="exp-date">Aug 2025 – Present</span>
-          </div>
-        </div>
-        <p class="exp-role-title">Junior Fullstack Software Developer</p>
-
-        <div class="exp-highlights">
-          <div class="hl-item">
-            <div class="hl-icon"><i data-lucide="layers"></i></div>
-            <div>
-              <strong>Full Ownership of Fullstack Cycle</strong>
-              <p>End-to-end development — from API design to UI delivery — managing both frontend and backend architectures for high-traffic applications.</p>
-            </div>
-          </div>
-          <div class="hl-item">
-            <div class="hl-icon"><i data-lucide="brain-circuit"></i></div>
-            <div>
-              <strong>AI & Internal Systems</strong>
-              <p>Developed complex internal tools including data management platforms, advanced security protocols, and AI integrations.</p>
-            </div>
-          </div>
-          <div class="hl-item">
-            <div class="hl-icon"><i data-lucide="git-branch"></i></div>
-            <div>
-              <strong>DevOps & CI/CD</strong>
-              <p>Managed hosting, deployments, and automated workflows using Hostinger, Git, and CI/CD pipelines — ensuring zero-downtime releases.</p>
-            </div>
-          </div>
-          <div class="hl-item">
-            <div class="hl-icon"><i data-lucide="zap"></i></div>
-            <div>
-              <strong>Performance & Accessibility</strong>
-              <p>Optimized performance, accessibility, and UX across web platforms; collaborated with marketing and design teams.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="impact-row">
-          <div class="impact-stat">
-            <span class="istat-num counter" data-target="60">0</span><span class="istat-unit">%</span>
-            <span class="istat-label">Faster API responses</span>
-          </div>
-          <div class="impact-stat">
-            <span class="istat-num">0</span>
-            <span class="istat-label">Downtime deployments</span>
-          </div>
-          <div class="impact-stat">
-            <span class="istat-num">∞</span>
-            <span class="istat-label">Scalable architecture</span>
-          </div>
-        </div>
-
-        <div class="exp-tags">
-          <span>Node.js</span><span>React</span><span>Next.js</span>
-          <span>CI/CD</span><span>AI Integration</span><span>TypeScript</span>
-          <span>PostgreSQL</span><span>Docker</span>
-        </div>
-      </div>
-
-      <!-- FREELANCE -->
-      <div class="exp-card glass-card reveal" style="--delay:0.2s" data-tilt>
-        <div class="exp-card-glow green"></div>
-        <div class="exp-header">
-          <div class="exp-logo-wrap">
-            <div class="exp-logo green">
-              <i data-lucide="code-2"></i>
-            </div>
-            <div>
-              <h3 class="exp-company">Freelance Projects</h3>
-              <p class="exp-location"><i data-lucide="globe"></i>Remote · Brazil & International</p>
-            </div>
-          </div>
-          <div class="exp-right">
-            <span class="exp-date">2023 – 2025</span>
-          </div>
-        </div>
-        <p class="exp-role-title">Fullstack Developer</p>
-        <div class="exp-highlights">
-          <div class="hl-item">
-            <div class="hl-icon green"><i data-lucide="shopping-bag"></i></div>
-            <div>
-              <strong>SaaS & Management Systems</strong>
-              <p>Delivered complete SaaS platforms for barbershops, dental clinics, and pizzerias — including auth, scheduling, payment integrations, and admin dashboards.</p>
-            </div>
-          </div>
-          <div class="hl-item">
-            <div class="hl-icon green"><i data-lucide="smartphone"></i></div>
-            <div>
-              <strong>Mobile + Web Integration</strong>
-              <p>Built integrated React Native mobile apps alongside web systems — enabling real-time order management and cross-platform experiences.</p>
-            </div>
-          </div>
-        </div>
-        <div class="exp-tags">
-          <span>.NET</span><span>Blazor</span><span>Stripe</span>
-          <span>React Native</span><span>Prisma</span><span>JWT</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════
-     PROJECTS
-══════════════════════════════ -->
-<section id="projetos" class="projects-section">
-  <div class="projects-ambient"></div>
-  <div class="container">
-    <p class="section-label reveal">What I've built</p>
-    <h2 class="section-title reveal" style="--delay:0.1s">Projects</h2>
-
-    <div class="projects-grid">
-
-      <div class="proj-card reveal" style="--delay:0.05s" data-tilt>
-        <div class="proj-card-inner">
-          <div class="proj-bg-glow blue"></div>
-          <div class="proj-top">
-            <div class="proj-icon blue"><i data-lucide="scissors"></i></div>
-            <span class="proj-status"><span></span>Live</span>
-          </div>
-          <h3>Barber PRO</h3>
-          <p>Complete barbershop management system with authentication, scheduling, barber management, and a subscription model with free and premium plans.</p>
-          <div class="proj-tags">
-            <span>Node.js</span><span>Prisma</span><span>JWT</span><span>TypeScript</span><span>Next.js</span>
-          </div>
-          <div class="proj-links">
-            <a href="https://barber-frontend-ruddy.vercel.app/login" target="_blank" class="proj-link-btn">
-              <i data-lucide="external-link"></i>Live Demo
-            </a>
-            <a href="https://github.com/IsaacVieira1/Barber-Pro" target="_blank" class="proj-link-ghost">
-              <i data-lucide="github"></i>Code
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="proj-card reveal" style="--delay:0.1s" data-tilt>
-        <div class="proj-card-inner">
-          <div class="proj-bg-glow orange"></div>
-          <div class="proj-top">
-            <div class="proj-icon orange"><i data-lucide="utensils"></i></div>
-            <span class="proj-status"><span></span>Live</span>
-          </div>
-          <h3>Pizzaria</h3>
-          <p>Web system for pizzeria management with interactive menu, payments, admin panel, and an integrated mobile app for real-time orders.</p>
-          <div class="proj-tags">
-            <span>React</span><span>React Native</span><span>TypeScript</span><span>Next.js</span><span>PostgreSQL</span>
-          </div>
-          <div class="proj-links">
-            <a href="https://pizzaria-frontend-lovat.vercel.app" target="_blank" class="proj-link-btn">
-              <i data-lucide="external-link"></i>Live Demo
-            </a>
-            <a href="https://github.com/IsaacVieira1/Projeto-Pizzaria" target="_blank" class="proj-link-ghost">
-              <i data-lucide="github"></i>Code
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="proj-card reveal" style="--delay:0.15s" data-tilt>
-        <div class="proj-card-inner">
-          <div class="proj-bg-glow green"></div>
-          <div class="proj-top">
-            <div class="proj-icon green"><i data-lucide="heart-pulse"></i></div>
-            <span class="proj-status"><span></span>Live</span>
-          </div>
-          <h3>OdontoPRO</h3>
-          <p>Complete system for dental clinics with scheduling, patient management, service catalog, and premium subscription features.</p>
-          <div class="proj-tags">
-            <span>Next.js</span><span>Prisma</span><span>Stripe</span><span>SaaS</span><span>Tailwind</span>
-          </div>
-          <div class="proj-links">
-            <a href="https://odonto-pro.vercel.app" target="_blank" class="proj-link-btn">
-              <i data-lucide="external-link"></i>Live Demo
-            </a>
-            <a href="https://github.com/IsaacVieira1/OdontoPRO" target="_blank" class="proj-link-ghost">
-              <i data-lucide="github"></i>Code
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="proj-card reveal" style="--delay:0.2s" data-tilt>
-        <div class="proj-card-inner">
-          <div class="proj-bg-glow purple"></div>
-          <div class="proj-top">
-            <div class="proj-icon purple"><i data-lucide="trending-up"></i></div>
-            <span class="proj-status"><span></span>Live</span>
-          </div>
-          <h3>DIMA — Financial System</h3>
-          <p>Personal and business financial control with dynamic charts, categories, transactions, secure auth, and a billing dashboard.</p>
-          <div class="proj-tags">
-            <span>.NET</span><span>Blazor</span><span>ASP.NET</span><span>Entity Framework</span><span>SQL Server</span>
-          </div>
-          <div class="proj-links">
-            <a href="https://dimafinanças.my.canva.site/sistema-financeiro" target="_blank" class="proj-link-btn">
-              <i data-lucide="presentation"></i>Presentation
-            </a>
-            <a href="https://github.com/IsaacVieira1/Dima" target="_blank" class="proj-link-ghost">
-              <i data-lucide="github"></i>Code
-            </a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════
-     CASE STUDIES
-══════════════════════════════ -->
-<section id="case-studies" class="cases-section">
-  <div class="cases-bg"></div>
-  <div class="container">
-    <p class="section-label reveal">Engineering depth</p>
-    <h2 class="section-title reveal" style="--delay:0.1s">Case Studies</h2>
-    <p class="section-sub reveal" style="--delay:0.15s">Real decisions, real tradeoffs — how I think about architecture, performance, and scale.</p>
-
-    <div class="cases-grid">
-
-      <!-- CASE 1 -->
-      <div class="case-card glass-card reveal" style="--delay:0.1s" data-tilt>
-        <div class="case-glow"></div>
-        <div class="case-header">
-          <span class="case-num">01</span>
-          <span class="case-badge">Performance</span>
-        </div>
-        <h3>API Response Time — 60% Reduction</h3>
-        <p class="case-ctx">OI Digital Media · Internal data management platform</p>
-
-        <div class="case-problem-box">
-          <span class="case-box-label">Problem</span>
-          <p>High-traffic internal APIs were averaging 800ms response times under concurrent load, causing UX degradation and workflow bottlenecks.</p>
-        </div>
-
-        <div class="arch-flow">
-          <div class="anode client">Client</div>
-          <div class="aconn"><span></span></div>
-          <div class="anode highlight">API + Cache</div>
-          <div class="aconn"><span></span></div>
-          <div class="anode db">PostgreSQL</div>
-        </div>
-
-        <div class="case-decisions">
-          <span class="case-box-label">Engineering Decisions</span>
-          <ul>
-            <li><i data-lucide="check"></i>Redis-based caching for frequent read queries</li>
-            <li><i data-lucide="check"></i>Optimized N+1 queries with Prisma eager loading</li>
-            <li><i data-lucide="check"></i>Database indexing on high-cardinality columns</li>
-            <li><i data-lucide="check"></i>Heavy computations moved to background jobs</li>
-          </ul>
-        </div>
-
-        <div class="case-result-row">
-          <div class="res-stat before">
-            <span class="res-num">800ms</span>
-            <span class="res-label">Before</span>
-          </div>
-          <div class="res-arrow">→</div>
-          <div class="res-stat after">
-            <span class="res-num">~320ms</span>
-            <span class="res-label">After</span>
-          </div>
-          <div class="res-badge">−60%</div>
-        </div>
-      </div>
-
-      <!-- CASE 2 -->
-      <div class="case-card glass-card reveal" style="--delay:0.15s" data-tilt>
-        <div class="case-glow purple"></div>
-        <div class="case-header">
-          <span class="case-num">02</span>
-          <span class="case-badge purple">Architecture</span>
-        </div>
-        <h3>SaaS Multi-Tenant Architecture</h3>
-        <p class="case-ctx">Barber PRO & OdontoPRO · Subscription-based platforms</p>
-
-        <div class="case-problem-box">
-          <span class="case-box-label">Challenge</span>
-          <p>Designing a multi-tenant SaaS where each business has isolated data, separate subscription tiers, and custom permissions — without duplicating infrastructure.</p>
-        </div>
-
-        <div class="arch-flow vertical">
-          <div class="anode client">Next.js Frontend (SSR)</div>
-          <div class="aconn-v"><span></span></div>
-          <div class="anode highlight">REST API + JWT Auth</div>
-          <div class="aconn-v"><span></span></div>
-          <div class="anode-row">
-            <div class="anode db small">Prisma ORM</div>
-            <div class="anode db small">Stripe Billing</div>
-          </div>
-        </div>
-
-        <div class="case-decisions">
-          <span class="case-box-label">Engineering Decisions</span>
-          <ul>
-            <li><i data-lucide="check"></i>Tenant isolation via organizationId scope on every query</li>
-            <li><i data-lucide="check"></i>JWT with role claims — owner, employee, admin</li>
-            <li><i data-lucide="check"></i>Stripe webhooks for real-time plan enforcement</li>
-            <li><i data-lucide="check"></i>SSR for SEO + instant load; CSR for dashboards</li>
-          </ul>
-        </div>
-
-        <div class="case-tags">
-          <span>Multi-tenant</span><span>SSR</span><span>RBAC</span><span>Stripe</span><span>JWT</span>
-        </div>
-      </div>
-
-      <!-- CASE 3 full width -->
-      <div class="case-card glass-card full-width reveal" style="--delay:0.2s">
-        <div class="case-glow teal"></div>
-        <div class="case-header">
-          <span class="case-num">03</span>
-          <span class="case-badge teal">DevOps</span>
-        </div>
-        <h3>Zero-Downtime CI/CD Pipeline</h3>
-        <p class="case-ctx">OI Digital Media · Production deployments</p>
-
-        <div class="cicd-flow">
-          <div class="cicd-step">
-            <div class="cicd-icon"><i data-lucide="git-commit-horizontal"></i></div>
-            <span>Push to main</span>
-          </div>
-          <div class="cicd-line"></div>
-          <div class="cicd-step">
-            <div class="cicd-icon"><i data-lucide="flask-conical"></i></div>
-            <span>Run tests</span>
-          </div>
-          <div class="cicd-line"></div>
-          <div class="cicd-step">
-            <div class="cicd-icon"><i data-lucide="package"></i></div>
-            <span>Build & bundle</span>
-          </div>
-          <div class="cicd-line"></div>
-          <div class="cicd-step accent">
-            <div class="cicd-icon"><i data-lucide="rocket"></i></div>
-            <span>Deploy</span>
-          </div>
-          <div class="cicd-line"></div>
-          <div class="cicd-step success">
-            <div class="cicd-icon"><i data-lucide="check-circle"></i></div>
-            <span>Live ✓</span>
-          </div>
-        </div>
-
-        <div class="case-two-col">
-          <div class="case-decisions">
-            <span class="case-box-label">Key Decisions</span>
+        <!-- MOBILE MENU -->
+        <div class="mobile-menu" id="mobileMenu">
             <ul>
-              <li><i data-lucide="check"></i>Git-based deployment triggers — no manual FTP</li>
-              <li><i data-lucide="check"></i>Environment separation: dev / staging / prod</li>
-              <li><i data-lucide="check"></i>Automated rollback on failed health checks</li>
+                <li><a href="#inicio" onclick="closeMobileMenu()">Home</a></li>
+                <li><a href="#sobre" onclick="closeMobileMenu()">About</a></li>
+                <li><a href="#experience" onclick="closeMobileMenu()">Experience</a></li>
+                <li><a href="#projetos" onclick="closeMobileMenu()">Projects</a></li>
+                <li><a href="#case-studies" onclick="closeMobileMenu()">Case Studies</a></li>
+                <li><a href="#curriculo" onclick="closeMobileMenu()">Resume</a></li>
+                <li><a href="#contato" onclick="closeMobileMenu()">Contact</a></li>
             </ul>
-          </div>
-          <div class="case-decisions">
-            <span class="case-box-label">Outcomes</span>
-            <ul>
-              <li><i data-lucide="zap"></i>Deploy time: ~20min → under 3min</li>
-              <li><i data-lucide="zap"></i>Zero production downtime incidents</li>
-              <li><i data-lucide="zap"></i>Team confidence in shipping daily updates</li>
-            </ul>
-          </div>
         </div>
-      </div>
 
-    </div>
-  </div>
-</section>
+        <!-- HERO -->
+        <section class="hero" id="inicio">
+            <div class="hero-bg-grid"></div>
 
-<!-- ══════════════════════════════
-     RESUME
-══════════════════════════════ -->
-<section id="curriculo" class="resume-section">
-  <div class="resume-bg-grid"></div>
-  <div class="container">
-    <p class="section-label reveal">Skills & Education</p>
-    <h2 class="section-title reveal" style="--delay:0.1s">Resume</h2>
+            <div class="slideshow reveal-hero">
+                <img src="Images/meandy.png" alt="Isaac — Photo 1" class="active" />
+                <img src="Images/meandy2.png" alt="Isaac — Photo 2" />
+                <img src="Images/meandy3.png" alt="Isaac — Photo 3" />
+                <div class="slide-dots" id="slideDots"></div>
+            </div>
 
-    <!-- Tech Stack -->
-    <div class="stack-block glass-card reveal" style="--delay:0.1s">
-      <h3 class="stack-title">Tech Stack</h3>
-      <div class="stack-rows">
-        <div class="stack-row">
-          <span class="stack-cat"><i data-lucide="monitor"></i>Frontend</span>
-          <div class="stack-pills">
-            <span class="spill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React"/>React</span>
-            <span class="spill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" alt="Next.js"/>Next.js</span>
-            <span class="spill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TS"/>TypeScript</span>
-            <span class="spill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS"/>JavaScript</span>
-          </div>
+            <div class="hero-text">
+                <p class="hero-eyebrow reveal" style="--delay:0.1s">Fullstack Developer</p>
+                <h1 class="reveal" style="--delay:0.2s">Hi, I'm <span class="accent">Isaac</span></h1>
+                <p class="hero-sub reveal" style="--delay:0.3s">
+                    Building clean, purposeful digital experiences — from backend systems to polished UIs.
+                </p>
+
+                <!-- HERO STATS -->
+                <div class="hero-stats reveal" style="--delay:0.35s">
+                    <div class="stat-item">
+                        <span class="stat-number">4+</span>
+                        <span class="stat-label">Projects Live</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">2+</span>
+                        <span class="stat-label">Yrs Experience</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">10+</span>
+                        <span class="stat-label">Tech Stack</span>
+                    </div>
+                </div>
+
+                <div class="hero-ctas reveal" style="--delay:0.4s">
+                    <a class="cta-btn primary"
+                        href="https://drive.google.com/file/d/1yv1pk2SYhSbrFObPv12J53C_jQBMKxiK/view?usp=drive_link"
+                        target="_blank" rel="noopener noreferrer">
+                        <i data-lucide="file-text"></i>
+                        View Resume
+                    </a>
+                    <a class="cta-btn ghost" href="#contato">
+                        <i data-lucide="send"></i>
+                        Get in Touch
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="sobre" class="sobre">
+            <div class="container">
+                <p class="section-label reveal">About me</p>
+                <h2 class="section-title accent reveal" style="--delay:0.1s">About</h2>
+                <div class="sobre-body">
+                    <p class="reveal" style="--delay:0.15s">
+                        For me, programming goes beyond written code — it's about giving life
+                        to ideas that are still taking shape. As a fullstack developer,
+                        I build solutions that truly make sense: functional, accessible, and purposeful.
+                    </p>
+                    <p class="reveal" style="--delay:0.2s">
+                        I have experience with different languages and frameworks, but what
+                        really drives me is writing clean, creative code that delivers a great
+                        experience for the end user.
+                    </p>
+                    <p class="reveal" style="--delay:0.25s">
+                        I believe in the power of technology to transform everyday life, which is
+                        why I'm always learning, testing, and evolving. I love combining logic
+                        with creativity to deliver real value to people.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════
+             EXPERIENCE SECTION (NEW)
+        ══════════════════════════════════════════ -->
+        <section id="experience" class="experience-section">
+            <div class="container">
+                <p class="section-label reveal">Where I've worked</p>
+                <h2 class="section-title reveal" style="--delay:0.1s">Experience</h2>
+
+                <div class="timeline">
+                    <!-- OI DIGITAL MEDIA -->
+                    <div class="timeline-item reveal" style="--delay:0.1s">
+                        <div class="timeline-line"></div>
+                        <div class="timeline-dot">
+                            <span class="dot-live"></span>
+                        </div>
+                        <div class="timeline-card">
+                            <div class="exp-header">
+                                <div class="exp-company-wrap">
+                                    <div class="exp-company-icon">
+                                        <i data-lucide="building-2"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="exp-company">OI Digital Media</h3>
+                                        <p class="exp-location"><i data-lucide="map-pin"></i> Remote · United States</p>
+                                    </div>
+                                </div>
+                                <div class="exp-meta">
+                                    <span class="exp-badge current">Current</span>
+                                    <span class="exp-date">Aug 2025 – Present</span>
+                                </div>
+                            </div>
+                            <p class="exp-role">Junior Fullstack Software Developer</p>
+
+                            <div class="exp-highlights">
+                                <div class="highlight-item">
+                                    <div class="highlight-icon"><i data-lucide="layers"></i></div>
+                                    <div>
+                                        <strong>Full Ownership of Fullstack Cycle</strong>
+                                        <p>Responsible for end-to-end development — from API design to UI delivery — managing both frontend and backend architectures for high-traffic applications.</p>
+                                    </div>
+                                </div>
+                                <div class="highlight-item">
+                                    <div class="highlight-icon"><i data-lucide="brain-circuit"></i></div>
+                                    <div>
+                                        <strong>AI & Internal Systems</strong>
+                                        <p>Developed complex internal tools for company operations, including data management platforms, advanced security protocols, and AI integrations.</p>
+                                    </div>
+                                </div>
+                                <div class="highlight-item">
+                                    <div class="highlight-icon"><i data-lucide="git-branch"></i></div>
+                                    <div>
+                                        <strong>DevOps & CI/CD</strong>
+                                        <p>Managed hosting, deployments, and automated workflows using Hostinger, Git, and CI/CD pipelines — ensuring zero-downtime releases.</p>
+                                    </div>
+                                </div>
+                                <div class="highlight-item">
+                                    <div class="highlight-icon"><i data-lucide="zap"></i></div>
+                                    <div>
+                                        <strong>Performance & Accessibility</strong>
+                                        <p>Optimized performance, accessibility, and UX across web platforms; collaborated with marketing and design teams to translate business goals into scalable applications.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- IMPACT METRICS -->
+                            <div class="impact-metrics">
+                                <div class="metric-card">
+                                    <span class="metric-num">60%</span>
+                                    <span class="metric-label">Faster API responses via caching & query optimization</span>
+                                </div>
+                                <div class="metric-card">
+                                    <span class="metric-num">0</span>
+                                    <span class="metric-label">Downtime deployments with CI/CD automation</span>
+                                </div>
+                                <div class="metric-card">
+                                    <span class="metric-num">∞</span>
+                                    <span class="metric-label">Scalable architecture designed for growth</span>
+                                </div>
+                            </div>
+
+                            <div class="exp-tags">
+                                <span>Node.js</span><span>React</span><span>Next.js</span>
+                                <span>CI/CD</span><span>AI Integration</span><span>TypeScript</span>
+                                <span>PostgreSQL</span><span>Docker</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FREELANCE -->
+                    <div class="timeline-item reveal" style="--delay:0.2s">
+                        <div class="timeline-line last"></div>
+                        <div class="timeline-dot">
+                            <span></span>
+                        </div>
+                        <div class="timeline-card">
+                            <div class="exp-header">
+                                <div class="exp-company-wrap">
+                                    <div class="exp-company-icon alt">
+                                        <i data-lucide="code-2"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="exp-company">Freelance Projects</h3>
+                                        <p class="exp-location"><i data-lucide="globe"></i> Remote · Brazil & International</p>
+                                    </div>
+                                </div>
+                                <div class="exp-meta">
+                                    <span class="exp-date">2023 – 2025</span>
+                                </div>
+                            </div>
+                            <p class="exp-role">Fullstack Developer</p>
+
+                            <div class="exp-highlights">
+                                <div class="highlight-item">
+                                    <div class="highlight-icon"><i data-lucide="shopping-bag"></i></div>
+                                    <div>
+                                        <strong>SaaS & Management Systems</strong>
+                                        <p>Delivered complete SaaS platforms for barbershops, dental clinics, and pizzerias — including auth, scheduling, payment integrations, and admin dashboards.</p>
+                                    </div>
+                                </div>
+                                <div class="highlight-item">
+                                    <div class="highlight-icon"><i data-lucide="smartphone"></i></div>
+                                    <div>
+                                        <strong>Mobile + Web Integration</strong>
+                                        <p>Built integrated React Native mobile apps alongside web systems — enabling real-time order management and cross-platform experiences.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="exp-tags">
+                                <span>.NET</span><span>Blazor</span><span>Stripe</span>
+                                <span>React Native</span><span>Prisma</span><span>JWT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projetos" class="projetos">
+            <div class="container">
+                <p class="section-label reveal">What I've built</p>
+                <h2 class="section-title reveal" style="--delay:0.1s">Projects</h2>
+
+                <div class="projects-grid">
+
+                    <div class="project-card reveal" style="--delay:0.05s">
+                        <div class="card-shine"></div>
+                        <div class="card-inner">
+                            <div class="project-card-top">
+                                <div class="project-icon">
+                                    <i data-lucide="scissors"></i>
+                                </div>
+                                <div class="project-status">Live</div>
+                            </div>
+                            <h3>Barber PRO</h3>
+                            <p>
+                                Complete barbershop management system with authentication, scheduling,
+                                barber management, and a subscription model with free and premium plans.
+                            </p>
+                            <div class="tech-tags">
+                                <span>Node.js</span><span>Prisma</span><span>JWT</span>
+                                <span>TypeScript</span><span>Next.js</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://barber-frontend-ruddy.vercel.app/login" target="_blank">
+                                    <i data-lucide="external-link"></i> Live Demo
+                                </a>
+                                <a href="https://github.com/IsaacVieira1/Barber-Pro" target="_blank">
+                                    <i data-lucide="github"></i> GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card reveal" style="--delay:0.1s">
+                        <div class="card-shine"></div>
+                        <div class="card-inner">
+                            <div class="project-card-top">
+                                <div class="project-icon">
+                                    <i data-lucide="utensils"></i>
+                                </div>
+                                <div class="project-status">Live</div>
+                            </div>
+                            <h3>Pizzaria</h3>
+                            <p>
+                                Web system for pizzeria management with interactive menu, payments,
+                                admin panel, and an integrated mobile app for real-time orders.
+                            </p>
+                            <div class="tech-tags">
+                                <span>React</span><span>React Native</span>
+                                <span>TypeScript</span><span>Next.js</span><span>PostgreSQL</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://pizzaria-frontend-lovat.vercel.app" target="_blank">
+                                    <i data-lucide="external-link"></i> Live Demo
+                                </a>
+                                <a href="https://github.com/IsaacVieira1/Projeto-Pizzaria" target="_blank">
+                                    <i data-lucide="github"></i> GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card reveal" style="--delay:0.15s">
+                        <div class="card-shine"></div>
+                        <div class="card-inner">
+                            <div class="project-card-top">
+                                <div class="project-icon">
+                                    <i data-lucide="heart-pulse"></i>
+                                </div>
+                                <div class="project-status">Live</div>
+                            </div>
+                            <h3>OdontoPRO</h3>
+                            <p>
+                                Complete system for dental clinics with scheduling, patient management,
+                                service catalog, and premium subscription features.
+                            </p>
+                            <div class="tech-tags">
+                                <span>Next.js</span><span>Prisma</span><span>Stripe</span>
+                                <span>SaaS</span><span>Tailwind CSS</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://odonto-pro.vercel.app" target="_blank">
+                                    <i data-lucide="external-link"></i> Live Demo
+                                </a>
+                                <a href="https://github.com/IsaacVieira1/OdontoPRO" target="_blank">
+                                    <i data-lucide="github"></i> GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card reveal" style="--delay:0.2s">
+                        <div class="card-shine"></div>
+                        <div class="card-inner">
+                            <div class="project-card-top">
+                                <div class="project-icon">
+                                    <i data-lucide="trending-up"></i>
+                                </div>
+                                <div class="project-status">Live</div>
+                            </div>
+                            <h3>DIMA — Financial System</h3>
+                            <p>
+                                Personal and business financial control with dynamic charts,
+                                categories, transactions, secure auth, and a billing dashboard.
+                            </p>
+                            <div class="tech-tags">
+                                <span>.NET</span><span>Blazor</span><span>ASP.NET</span>
+                                <span>Entity Framework</span><span>SQL Server</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://dimafinanças.my.canva.site/sistema-financeiro" target="_blank">
+                                    <i data-lucide="presentation"></i> Presentation
+                                </a>
+                                <a href="https://github.com/IsaacVieira1/Dima" target="_blank">
+                                    <i data-lucide="github"></i> GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════
+             CASE STUDIES / ENGINEERING DECISIONS (NEW)
+        ══════════════════════════════════════════ -->
+        <section id="case-studies" class="case-studies">
+            <div class="container">
+                <p class="section-label reveal">Engineering depth</p>
+                <h2 class="section-title reveal" style="--delay:0.1s">Case Studies</h2>
+                <p class="section-sub reveal" style="--delay:0.15s">
+                    Real decisions, real tradeoffs — how I think about architecture, performance, and scale.
+                </p>
+
+                <div class="case-grid">
+
+                    <!-- CASE 1 -->
+                    <div class="case-card reveal" style="--delay:0.1s">
+                        <div class="case-card-header">
+                            <div class="case-number">01</div>
+                            <div class="case-badge">Performance</div>
+                        </div>
+                        <h3>API Response Time — 60% Reduction</h3>
+                        <p class="case-context">OI Digital Media · Internal data management platform</p>
+
+                        <div class="case-problem">
+                            <span class="label">Problem</span>
+                            <p>High-traffic internal APIs were averaging 800ms response times under concurrent load, causing UX degradation and bottlenecks in team workflows.</p>
+                        </div>
+
+                        <div class="arch-flow">
+                            <div class="arch-node client">Client</div>
+                            <div class="arch-arrow"><i data-lucide="arrow-right"></i></div>
+                            <div class="arch-node api highlight">API + Cache Layer</div>
+                            <div class="arch-arrow"><i data-lucide="arrow-right"></i></div>
+                            <div class="arch-node db">PostgreSQL</div>
+                        </div>
+
+                        <div class="case-decisions">
+                            <span class="label">Engineering Decisions</span>
+                            <ul>
+                                <li><i data-lucide="check"></i> Implemented Redis-based caching for frequent read queries</li>
+                                <li><i data-lucide="check"></i> Optimized N+1 queries with Prisma select + eager loading</li>
+                                <li><i data-lucide="check"></i> Added database indexing on high-cardinality columns</li>
+                                <li><i data-lucide="check"></i> Moved heavy computations to background jobs</li>
+                            </ul>
+                        </div>
+
+                        <div class="case-result">
+                            <div class="result-stat">
+                                <span class="result-num">800ms</span>
+                                <span class="result-label">Before</span>
+                            </div>
+                            <div class="result-arrow"><i data-lucide="arrow-right"></i></div>
+                            <div class="result-stat green">
+                                <span class="result-num">~320ms</span>
+                                <span class="result-label">After</span>
+                            </div>
+                            <div class="result-badge">−60%</div>
+                        </div>
+                    </div>
+
+                    <!-- CASE 2 -->
+                    <div class="case-card reveal" style="--delay:0.15s">
+                        <div class="case-card-header">
+                            <div class="case-number">02</div>
+                            <div class="case-badge">Architecture</div>
+                        </div>
+                        <h3>SaaS Multi-Tenant Architecture</h3>
+                        <p class="case-context">Barber PRO & OdontoPRO · Subscription-based platforms</p>
+
+                        <div class="case-problem">
+                            <span class="label">Challenge</span>
+                            <p>Designing a multi-tenant SaaS where each business has isolated data, separate subscription tiers, and custom permissions — without duplicating infrastructure.</p>
+                        </div>
+
+                        <div class="arch-flow vertical">
+                            <div class="arch-node client">Next.js Frontend (SSR)</div>
+                            <div class="arch-arrow-v"><i data-lucide="arrow-down"></i></div>
+                            <div class="arch-node api highlight">REST API + JWT Auth</div>
+                            <div class="arch-arrow-v"><i data-lucide="arrow-down"></i></div>
+                            <div class="arch-node-row">
+                                <div class="arch-node db small">Prisma ORM</div>
+                                <div class="arch-node db small">Stripe Billing</div>
+                            </div>
+                        </div>
+
+                        <div class="case-decisions">
+                            <span class="label">Engineering Decisions</span>
+                            <ul>
+                                <li><i data-lucide="check"></i> Tenant isolation via organizationId scope on every query</li>
+                                <li><i data-lucide="check"></i> JWT with role claims — owner, employee, admin</li>
+                                <li><i data-lucide="check"></i> Stripe webhooks for real-time plan enforcement</li>
+                                <li><i data-lucide="check"></i> SSR for SEO + instant load; CSR for interactive dashboards</li>
+                            </ul>
+                        </div>
+
+                        <div class="case-tags">
+                            <span>Multi-tenant</span><span>SSR</span><span>RBAC</span>
+                            <span>Stripe</span><span>JWT</span>
+                        </div>
+                    </div>
+
+                    <!-- CASE 3 -->
+                    <div class="case-card reveal full-width" style="--delay:0.2s">
+                        <div class="case-card-header">
+                            <div class="case-number">03</div>
+                            <div class="case-badge">DevOps</div>
+                        </div>
+                        <h3>Zero-Downtime CI/CD Pipeline</h3>
+                        <p class="case-context">OI Digital Media · Production deployments</p>
+
+                        <div class="cicd-flow">
+                            <div class="cicd-step">
+                                <div class="cicd-icon"><i data-lucide="git-commit-horizontal"></i></div>
+                                <span>Push to main</span>
+                            </div>
+                            <div class="cicd-connector"></div>
+                            <div class="cicd-step">
+                                <div class="cicd-icon"><i data-lucide="flask-conical"></i></div>
+                                <span>Run tests</span>
+                            </div>
+                            <div class="cicd-connector"></div>
+                            <div class="cicd-step">
+                                <div class="cicd-icon"><i data-lucide="package"></i></div>
+                                <span>Build & bundle</span>
+                            </div>
+                            <div class="cicd-connector"></div>
+                            <div class="cicd-step highlight">
+                                <div class="cicd-icon"><i data-lucide="rocket"></i></div>
+                                <span>Deploy (Hostinger/SiteGround)</span>
+                            </div>
+                            <div class="cicd-connector"></div>
+                            <div class="cicd-step green">
+                                <div class="cicd-icon"><i data-lucide="check-circle"></i></div>
+                                <span>Live ✓</span>
+                            </div>
+                        </div>
+
+                        <div class="case-decisions-row">
+                            <div class="case-decisions">
+                                <span class="label">Key Decisions</span>
+                                <ul>
+                                    <li><i data-lucide="check"></i> Git-based deployment triggers — no manual FTP</li>
+                                    <li><i data-lucide="check"></i> Environment separation: dev / staging / prod</li>
+                                    <li><i data-lucide="check"></i> Automated rollback on failed health checks</li>
+                                </ul>
+                            </div>
+                            <div class="case-decisions">
+                                <span class="label">Outcomes</span>
+                                <ul>
+                                    <li><i data-lucide="zap"></i> Deploy time reduced from ~20min to under 3min</li>
+                                    <li><i data-lucide="zap"></i> Zero production downtime incidents</li>
+                                    <li><i data-lucide="zap"></i> Team confidence in shipping daily updates</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- RESUME — TECH STACK REORGANIZED -->
+        <section id="curriculo" class="curriculo">
+            <div class="container">
+                <p class="section-label reveal">Skills &amp; Education</p>
+                <h2 class="section-title reveal" style="--delay:0.1s">Resume</h2>
+
+                <!-- TECH STACK BY CONTEXT -->
+                <div class="stack-section reveal" style="--delay:0.1s">
+                    <h3 class="stack-section-title">Tech Stack</h3>
+                    <div class="stack-grid">
+
+                        <div class="stack-group">
+                            <div class="stack-group-label">
+                                <i data-lucide="monitor"></i> Frontend
+                            </div>
+                            <div class="stack-pills">
+                                <span class="stack-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" />React</span>
+                                <span class="stack-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" alt="Next.js" />Next.js</span>
+                                <span class="stack-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TS" />TypeScript</span>
+                                <span class="stack-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS" />JavaScript</span>
+                            </div>
+                        </div>
+
+                        <div class="stack-group">
+                            <div class="stack-group-label">
+                                <i data-lucide="server"></i> Backend
+                            </div>
+                            <div class="stack-pills">
+                                <span class="stack-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" />Node.js</span>
+                                <span class="stack-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" />C#</span>
+                                <span class="stack-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg" alt=".NET" />.NET / ASP.NET</span>
+                            </div>
+                        </div>
+
+                        <div class="stack-group">
+                            <div class="stack-group-label">
+                                <i data-lucide="database"></i> Database
+                            </div>
+                            <div class="stack-pills">
+                                <span class="stack-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" />PostgreSQL</span>
+                                <span class="stack-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL" />MySQL / SQL Server</span>
+                            </div>
+                        </div>
+
+                        <div class="stack-group">
+                            <div class="stack-group-label">
+                                <i data-lucide="cloud"></i> DevOps
+                            </div>
+                            <div class="stack-pills">
+                                <span class="stack-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" />Docker</span>
+                                <span class="stack-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" alt="Azure" />Azure</span>
+                                <span class="stack-pill">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
+                                    CI/CD
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="stack-group">
+                            <div class="stack-group-label">
+                                <i data-lucide="wrench"></i> Tools
+                            </div>
+                            <div class="stack-pills">
+                                <span class="stack-pill">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                                    Prisma
+                                </span>
+                                <span class="stack-pill">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+                                    Stripe
+                                </span>
+                                <span class="stack-pill">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                                    Git / GitHub
+                                </span>
+                                <span class="stack-pill">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                                    JWT / Auth
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- SOFT SKILLS -->
+                <div class="curriculo-grid" style="margin-top: 32px;">
+                    <div class="curriculo-col reveal" style="--delay:0.2s">
+                        <div class="col-header">
+                            <i data-lucide="sparkles"></i>
+                            <h3>Soft Skills</h3>
+                        </div>
+                        <ul class="soft-list">
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Clear Communication</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Problem Solving</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Proactivity</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Teamwork</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Organization</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Analytical Thinking</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Adaptability</li>
+                        </ul>
+                    </div>
+                    <div class="curriculo-col reveal" style="--delay:0.25s">
+                        <div class="col-header">
+                            <i data-lucide="target"></i>
+                            <h3>Practices</h3>
+                        </div>
+                        <ul class="soft-list">
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Clean Architecture</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>RESTful API Design</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Code Review</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Agile / Scrum</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Performance Optimization</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Security Best Practices</li>
+                            <li><i data-lucide="check-circle" class="soft-icon"></i>Responsive Design</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EDUCATION BANNER -->
+        <div class="education-banner reveal">
+            <div class="edu-icon-wrap">
+                <i data-lucide="graduation-cap"></i>
+            </div>
+            <div class="edu-text">
+                <p>
+                    Currently pursuing <strong class="accent">Software Engineering</strong>
+                    at <strong class="accent-blue">Infnet University</strong>
+                </p>
+                <small>Started: 2025 &nbsp;·&nbsp; Expected graduation: 2029</small>
+            </div>
         </div>
-        <div class="stack-row">
-          <span class="stack-cat"><i data-lucide="server"></i>Backend</span>
-          <div class="stack-pills">
-            <span class="spill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node"/>Node.js</span>
-            <span class="spill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#"/>C#</span>
-            <span class="spill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg" alt=".NET"/>.NET / ASP.NET</span>
-          </div>
-        </div>
-        <div class="stack-row">
-          <span class="stack-cat"><i data-lucide="database"></i>Database</span>
-          <div class="stack-pills">
-            <span class="spill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PG"/>PostgreSQL</span>
-            <span class="spill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL"/>MySQL / SQL Server</span>
-          </div>
-        </div>
-        <div class="stack-row">
-          <span class="stack-cat"><i data-lucide="cloud"></i>DevOps</span>
-          <div class="stack-pills">
-            <span class="spill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker"/>Docker</span>
-            <span class="spill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" alt="Azure"/>Azure</span>
-            <span class="spill"><i data-lucide="git-branch" style="width:16px;height:16px;color:#007AFF"></i>CI/CD</span>
-          </div>
-        </div>
-        <div class="stack-row">
-          <span class="stack-cat"><i data-lucide="wrench"></i>Tools</span>
-          <div class="stack-pills">
-            <span class="spill"><i data-lucide="code-2" style="width:16px;height:16px;color:#007AFF"></i>Prisma</span>
-            <span class="spill"><i data-lucide="credit-card" style="width:16px;height:16px;color:#007AFF"></i>Stripe</span>
-            <span class="spill"><i data-lucide="github" style="width:16px;height:16px;color:#007AFF"></i>Git / GitHub</span>
-            <span class="spill"><i data-lucide="shield" style="width:16px;height:16px;color:#007AFF"></i>JWT / Auth</span>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Skills grid -->
-    <div class="skills-grid">
-      <div class="skills-col glass-card reveal" style="--delay:0.2s">
-        <div class="skills-header">
-          <i data-lucide="sparkles"></i>
-          <h3>Soft Skills</h3>
-        </div>
-        <ul class="skills-list">
-          <li><i data-lucide="check-circle"></i>Clear Communication</li>
-          <li><i data-lucide="check-circle"></i>Problem Solving</li>
-          <li><i data-lucide="check-circle"></i>Proactivity</li>
-          <li><i data-lucide="check-circle"></i>Teamwork</li>
-          <li><i data-lucide="check-circle"></i>Organization</li>
-          <li><i data-lucide="check-circle"></i>Analytical Thinking</li>
-          <li><i data-lucide="check-circle"></i>Adaptability</li>
-        </ul>
-      </div>
-      <div class="skills-col glass-card reveal" style="--delay:0.25s">
-        <div class="skills-header">
-          <i data-lucide="target"></i>
-          <h3>Practices</h3>
-        </div>
-        <ul class="skills-list">
-          <li><i data-lucide="check-circle"></i>Clean Architecture</li>
-          <li><i data-lucide="check-circle"></i>RESTful API Design</li>
-          <li><i data-lucide="check-circle"></i>Code Review</li>
-          <li><i data-lucide="check-circle"></i>Agile / Scrum</li>
-          <li><i data-lucide="check-circle"></i>Performance Optimization</li>
-          <li><i data-lucide="check-circle"></i>Security Best Practices</li>
-          <li><i data-lucide="check-circle"></i>Responsive Design</li>
-        </ul>
-      </div>
-    </div>
+        <!-- FOOTER -->
+        <footer id="contato" class="site-footer">
+            <div class="footer-bg-dots"></div>
+            <div class="footer-inner">
+                <p class="section-label light reveal">Let's connect</p>
+                <h2 class="footer-title reveal" style="--delay:0.1s">Get in Touch</h2>
 
-    <!-- Education -->
-    <div class="edu-card glass-card reveal" style="--delay:0.3s">
-      <div class="edu-icon-wrap"><i data-lucide="graduation-cap"></i></div>
-      <div class="edu-text">
-        <p>Currently pursuing <strong>Software Engineering</strong> at <strong class="blue">Infnet University</strong></p>
-        <small>Started: 2025 · Expected graduation: 2029</small>
-      </div>
-      <div class="edu-tag">In Progress</div>
-    </div>
+                <div class="contact-links">
+                    <a href="mailto:isaacvieirah2@gmail.com" class="contact-item reveal" style="--delay:0.15s">
+                        <span class="contact-icon-wrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </span>
+                        <span>isaacvieirah2@gmail.com</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/isaac-space01/" target="_blank" class="contact-item reveal" style="--delay:0.2s">
+                        <span class="contact-icon-wrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                        </span>
+                        <span>linkedin.com/in/isaacvieira-dev</span>
+                    </a>
+                    <a href="https://github.com/IsaacVieira1" target="_blank" class="contact-item reveal" style="--delay:0.25s">
+                        <span class="contact-icon-wrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                        </span>
+                        <span>github.com/IsaacVieira1</span>
+                    </a>
+                </div>
 
-  </div>
-</section>
+                <p class="footer-copy reveal" style="--delay:0.3s">© 2025 Isaac Vieira. All rights reserved.</p>
+            </div>
+        </footer>
 
-<!-- ══════════════════════════════
-     FOOTER / CONTACT
-══════════════════════════════ -->
-<footer id="contato" class="site-footer">
-  <canvas class="footer-particles" id="footerParticles"></canvas>
-  <div class="footer-orb footer-orb-1"></div>
-  <div class="footer-orb footer-orb-2"></div>
-  <div class="footer-inner">
-    <p class="section-label light reveal">Let's connect</p>
-    <h2 class="footer-title reveal" style="--delay:0.1s">
-      Get in<br/><span class="footer-gradient-text">Touch</span>
-    </h2>
+    </main>
 
-   <div class="contact-grid reveal" style="--delay:0.2s">
+    <script>
+        lucide.createIcons();
 
-  <a href="mailto:isaacvieirah2@gmail.com" class="contact-card glass-card-dark mag-btn">
-    <div class="cc-icon-wrap">
-      <i data-lucide="mail"></i>
-    </div>
-    <div class="cc-text">
-      <span class="cc-label">Email</span>
-      <span class="cc-val">isaacvieirah2@gmail.com</span>
-    </div>
-    <i data-lucide="arrow-up-right" class="cc-arrow"></i>
-  </a>
+        // ── SLIDESHOW ──────────────────────────────────────
+        const slides = document.querySelectorAll('.slideshow img');
+        const dotsContainer = document.getElementById('slideDots');
+        let current = 0;
 
-  <a href="https://www.linkedin.com/in/isaac-space01/" target="_blank" class="contact-card glass-card-dark mag-btn">
-    <div class="cc-icon-wrap linkedin">
-      <i data-lucide="linkedin"></i>
-    </div>
-    <div class="cc-text">
-      <span class="cc-label">LinkedIn</span>
-      <span class="cc-val">isaac-space01</span>
-    </div>
-    <i data-lucide="arrow-up-right" class="cc-arrow"></i>
-  </a>
+        slides.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+            dot.addEventListener('click', () => goTo(i));
+            dotsContainer.appendChild(dot);
+        });
 
-  <a href="https://github.com/IsaacVieira1" target="_blank" class="contact-card glass-card-dark mag-btn">
-    <div class="cc-icon-wrap github">
-      <i data-lucide="github"></i>
-    </div>
-    <div class="cc-text">
-      <span class="cc-label">GitHub</span>
-      <span class="cc-val">IsaacVieira1</span>
-    </div>
-    <i data-lucide="arrow-up-right" class="cc-arrow"></i>
-  </a>
+        const dots = document.querySelectorAll('.dot');
 
-</div>
-    <div class="footer-bottom reveal" style="--delay:0.4s">
-      <div class="footer-logo-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-        <span>Isaac Vieira</span>
-      </div>
-      <p class="footer-copy">© 2025 Isaac Vieira. All rights reserved.</p>
-    </div>
-  </div>
-</footer>
+        function goTo(n) {
+            slides[current].classList.remove('active');
+            dots[current].classList.remove('active');
+            current = n;
+            slides[current].classList.add('active');
+            dots[current].classList.add('active');
+        }
 
-</main>
+        setInterval(() => goTo((current + 1) % slides.length), 4000);
 
-<script src="script.js"></script>
+        // ── MOBILE MENU ────────────────────────────────────
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuToggle.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+        function closeMobileMenu() { mobileMenu.classList.remove('open'); }
+
+        // ── HEADER SCROLL ──────────────────────────────────
+        const header = document.getElementById('site-header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 20);
+        }, { passive: true });
+
+        // ── SCROLL REVEAL ──────────────────────────────────
+        const revealEls = document.querySelectorAll('.reveal, .reveal-hero');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08 });
+        revealEls.forEach(el => observer.observe(el));
+
+        // ── CURSOR GLOW ────────────────────────────────────
+        const glow = document.getElementById('cursorGlow');
+        document.addEventListener('mousemove', e => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        }, { passive: true });
+
+        // ── CARD 3D TILT ───────────────────────────────────
+        document.querySelectorAll('.project-card, .case-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                card.style.transform = `perspective(900px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-4px) scale(1.01)`;
+                const shine = card.querySelector('.card-shine');
+                if (shine) {
+                    shine.style.background = `radial-gradient(circle at ${(x + 0.5) * 100}% ${(y + 0.5) * 100}%, rgba(255,255,255,0.15), transparent 70%)`;
+                }
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+                const shine = card.querySelector('.card-shine');
+                if (shine) shine.style.background = '';
+            });
+        });
+
+        // ── STAGGER TECH LIST ──────────────────────────────
+        document.querySelectorAll('.tech-list li, .soft-list li').forEach((li, i) => {
+            li.style.animationDelay = (i * 0.06) + 's';
+        });
+
+        // ── COUNTER ANIMATION ──────────────────────────────
+        function animateCounter(el) {
+            const text = el.textContent;
+            const num = parseFloat(text);
+            if (isNaN(num)) return;
+            const suffix = text.replace(/[\d.]/g, '');
+            let start = 0;
+            const duration = 1200;
+            const step = (timestamp) => {
+                if (!start) start = timestamp;
+                const progress = Math.min((timestamp - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = (num * eased).toFixed(num % 1 !== 0 ? 1 : 0) + suffix;
+                if (progress < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        }
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.metric-num, .stat-number').forEach(animateCounter);
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.impact-metrics, .hero-stats').forEach(el => counterObserver.observe(el));
+    </script>
 </body>
 </html>
